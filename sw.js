@@ -1,4 +1,4 @@
-const CACHE_NAME = "tour-bus-check-v1";
+const CACHE_NAME = "tour-bus-check-v2";
 
 const FILES_TO_CACHE = [
   "./",
