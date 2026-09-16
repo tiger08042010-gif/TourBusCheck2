@@ -397,7 +397,82 @@
 
     };
 
-  </script>
+  // =========================
+// ระบบส่งข้อความแจ้งข่าวสาร
+// =========================
+
+const announcementGroup =
+  document.getElementById("announcementGroup");
+
+const announcementMessage =
+  document.getElementById("announcementMessage");
+
+const announcementList =
+  document.getElementById("announcementList");
+
+// โหลดรายชื่อกลุ่มมาใส่ในช่องเลือก
+onSnapshot(groupsRef, (snapshot) => {
+
+  announcementGroup.innerHTML =
+    '<option value="">-- เลือกกลุ่ม --</option>';
+
+  snapshot.forEach((item) => {
+
+    const data = item.data();
+
+    const option =
+      document.createElement("option");
+
+    option.value = item.id;
+    option.textContent = data.name;
+
+    announcementGroup.appendChild(option);
+
+  });
+
+});
+
+
+// ส่งประกาศ
+window.sendAnnouncement = async function() {
+
+  const groupId =
+    announcementGroup.value;
+
+  const message =
+    announcementMessage.value.trim();
+
+  if (!groupId) {
+    alert("กรุณาเลือกกลุ่ม");
+    return;
+  }
+
+  if (!message) {
+    alert("กรุณาพิมพ์ข้อความ");
+    return;
+  }
+
+  const announcementsRef =
+    collection(
+      db,
+      "groups",
+      groupId,
+      "announcements"
+    );
+
+  await addDoc(announcementsRef, {
+
+    message: message,
+
+    createdAt: new Date()
+
+  });
+
+  announcementMessage.value = "";
+
+  alert("ส่งประกาศเรียบร้อยแล้ว");
+
+};</script>
 <div class="box">
   <h2>📢 ส่งข้อความแจ้งข่าวสาร</h2>
 
