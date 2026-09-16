@@ -138,6 +138,13 @@
 
     import { initializeApp }
       from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+    import {
+
+  getAuth,
+
+  onAuthStateChanged
+
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
     import {
       getFirestore,
@@ -164,9 +171,17 @@
     };
 
     const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
     const db = getFirestore(app);
+    
 
     const groupsRef = collection(db, "groups");
+    onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    alert("กรุณาเข้าสู่ระบบก่อนใช้งาน");
+    window.location.href = "login.html";
+  }
+});
 
     let groups = [];
 
