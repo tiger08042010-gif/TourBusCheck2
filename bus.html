@@ -1,795 +1,804 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>สมาชิกในรถทัวร์</title>
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-
-            background: linear-gradient(
-                135deg,
-                #dbeafe,
-                #eff6ff
-            );
-
-            min-height: 100vh;
-
-            padding: 20px 15px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 800px;
-            margin: auto;
-        }
-
-        /* ส่วนหัว */
-
-        .header {
-            background: white;
-
-            padding: 25px 20px;
-
-            border-radius: 24px;
-
-            text-align: center;
-
-            box-shadow:
-                0 8px 25px
-                rgba(0, 0, 0, 0.10);
-
-            margin-bottom: 20px;
-        }
-
-        .bus-icon {
-            font-size: 55px;
-            margin-bottom: 8px;
-        }
-
-        .header h1 {
-            color: #1e3a8a;
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
-
-        .header p {
-            color: #64748b;
-            font-size: 15px;
-        }
-
-        /* สรุปจำนวน */
-
-        .summary {
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 12px;
-
-            margin-bottom: 20px;
-        }
-
-        .summary-card {
-            background: white;
-
-            padding: 18px 10px;
-
-            border-radius: 18px;
-
-            text-align: center;
-
-            box-shadow:
-                0 5px 15px
-                rgba(0, 0, 0, 0.08);
-        }
-
-        .number {
-            font-size: 27px;
-            font-weight: bold;
-            color: #1e3a8a;
-            margin-bottom: 5px;
-        }
-
-        .label {
-            font-size: 13px;
-            color: #64748b;
-        }
-
-        /* เพิ่มสมาชิก */
-
-        .add-box {
-            background: white;
-
-            padding: 20px;
-
-            border-radius: 20px;
-
-            box-shadow:
-                0 5px 18px
-                rgba(0, 0, 0, 0.08);
-
-            margin-bottom: 20px;
-        }
-
-        .add-box h2 {
-            font-size: 19px;
-
-            color: #1e293b;
-
-            margin-bottom: 15px;
-        }
-
-        .input-row {
-            display: flex;
-            gap: 10px;
-        }
-
-        .input-row input {
-            flex: 1;
-
-            padding: 13px;
-
-            border: 1px solid #cbd5e1;
-
-            border-radius: 12px;
-
-            font-size: 16px;
-
-            outline: none;
-        }
-
-        .add-button {
-            border: none;
-
-            background: #2563eb;
-
-            color: white;
-
-            padding: 13px 18px;
-
-            border-radius: 12px;
-
-            font-size: 15px;
-
-            font-weight: bold;
-        }
-
-        /* รายชื่อ */
-
-        .member-title {
-            font-size: 20px;
-
-            color: #1e293b;
-
-            margin: 20px 5px 12px;
-        }
-
-        .member-card {
-            background: white;
-
-            padding: 18px;
-
-            border-radius: 18px;
-
-            margin-bottom: 12px;
-
-            box-shadow:
-                0 5px 15px
-                rgba(0, 0, 0, 0.08);
-        }
-
-        .member-top {
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            gap: 10px;
-
-            margin-bottom: 12px;
-        }
-
-        .member-name {
-            font-size: 17px;
-
-            font-weight: bold;
-
-            color: #1e293b;
-        }
-
-        .status {
-            font-size: 13px;
-
-            padding: 6px 10px;
-
-            border-radius: 20px;
-
-            font-weight: bold;
-        }
-
-        .boarded {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .not-boarded {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .button-row {
-            display: flex;
-            gap: 8px;
-        }
-
-        .button-row button {
-            flex: 1;
-
-            padding: 10px;
-
-            border: none;
-
-            border-radius: 10px;
-
-            font-size: 14px;
-        }
-
-        .check-button {
-            background: #2563eb;
-            color: white;
-        }
-
-        .edit-button {
-            background: #e0e7ff;
-            color: #3730a3;
-        }
-
-        .delete-button {
-            background: #fee2e2;
-            color: #b91c1c;
-        }
-
-        .empty {
-            background: white;
-
-            padding: 30px;
-
-            border-radius: 18px;
-
-            text-align: center;
-
-            color: #64748b;
-        }
-
-        .empty-icon {
-            font-size: 45px;
-            margin-bottom: 10px;
-        }
-
-        /* ปุ่มกลับ */
-
-        .back-button {
-            width: 100%;
-
-            padding: 14px;
-
-            margin-top: 20px;
-
-            border: none;
-
-            border-radius: 14px;
-
-            background: white;
-
-            color: #1e3a8a;
-
-            font-size: 16px;
-
-            font-weight: bold;
-        }
-
-        @media (max-width: 600px) {
-
-            .summary {
-                grid-template-columns: 1fr;
-            }
-
-            .input-row {
-                flex-direction: column;
-            }
-
-            .add-button {
-                width: 100%;
-            }
-
-            .member-top {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .button-row {
-                flex-direction: column;
-            }
-
-        }
-
-    </style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>รายชื่อสมาชิก - Tour Bus Check</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+      color: #333;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 900px;
+      margin: 30px auto;
+    }
+
+    .header {
+      background: white;
+      padding: 25px;
+      border-radius: 25px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .bus-icon {
+      font-size: 55px;
+    }
+
+    h1 {
+      margin: 10px 0 5px;
+      color: #1976d2;
+    }
+
+    .subtitle {
+      color: #777;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .summary-card {
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    }
+
+    .summary-number {
+      font-size: 32px;
+      font-weight: bold;
+      color: #1976d2;
+    }
+
+    .summary-title {
+      margin-top: 5px;
+      color: #666;
+    }
+
+    .add-box {
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .add-box h2 {
+      margin-top: 0;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    input {
+      flex: 1;
+      padding: 14px;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      font-size: 16px;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .add-button {
+      background: #1976d2;
+      color: white;
+      font-weight: bold;
+    }
+
+    .member-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .member-card {
+      background: white;
+      padding: 18px;
+      border-radius: 18px;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.08);
+    }
+
+    .member-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .member-name {
+      font-size: 19px;
+      font-weight: bold;
+    }
+
+    .status {
+      padding: 7px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .boarded {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .not-boarded {
+      background: #fff3e0;
+      color: #ef6c00;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 15px;
+    }
+
+    .check-button {
+      background: #43a047;
+      color: white;
+    }
+
+    .edit-button {
+      background: #ffb300;
+      color: white;
+    }
+
+    .delete-button {
+      background: #e53935;
+      color: white;
+    }
+
+    .back-button {
+      width: 100%;
+      margin-top: 20px;
+      background: #555;
+      color: white;
+      padding: 15px;
+    }
+
+    .empty {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      color: #777;
+    }
+
+    .empty-icon {
+      font-size: 50px;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 650px) {
+      .summary {
+        grid-template-columns: 1fr;
+      }
+
+      .input-row {
+        flex-direction: column;
+      }
+
+      .member-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .button-row {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
 </head>
-
 
 <body>
 
-
-<div class="container">
-
-
-    <!-- ส่วนหัว -->
+  <div class="container">
 
     <div class="header">
-
-        <div class="bus-icon">
-            🚌
-        </div>
-
-        <h1 id="busTitle">
-            รถทัวร์คันที่ 1
-        </h1>
-
-        <p>
-            ระบบจัดการและเช็กชื่อสมาชิกในรถ
-        </p>
-
+      <div class="bus-icon">🚌</div>
+      <h1 id="busTitle">รถทัวร์คันที่ 1</h1>
+      <div class="subtitle">
+        ระบบเช็กชื่อสมาชิกในรถทัวร์
+      </div>
     </div>
-
-
-    <!-- สรุป -->
 
     <div class="summary">
 
-        <div class="summary-card">
+      <div class="summary-card">
+        <div class="summary-number" id="total">0</div>
+        <div class="summary-title">สมาชิกทั้งหมด</div>
+      </div>
 
-            <div
-                class="number"
-                id="total"
-            >
-                0
-            </div>
+      <div class="summary-card">
+        <div class="summary-number" id="boarded">0</div>
+        <div class="summary-title">ขึ้นรถแล้ว</div>
+      </div>
 
-            <div class="label">
-                👥 สมาชิกทั้งหมด
-            </div>
-
-        </div>
-
-
-        <div class="summary-card">
-
-            <div
-                class="number"
-                id="boarded"
-            >
-                0
-            </div>
-
-            <div class="label">
-                ✅ ขึ้นรถแล้ว
-            </div>
-
-        </div>
-
-
-        <div class="summary-card">
-
-            <div
-                class="number"
-                id="notBoarded"
-            >
-                0
-            </div>
-
-            <div class="label">
-                ⏳ ยังไม่ขึ้นรถ
-            </div>
-
-        </div>
+      <div class="summary-card">
+        <div class="summary-number" id="notBoarded">0</div>
+        <div class="summary-title">ยังไม่ขึ้นรถ</div>
+      </div>
 
     </div>
-
-
-    <!-- เพิ่มสมาชิก -->
 
     <div class="add-box">
 
-        <h2>
-            ➕ เพิ่มสมาชิก
-        </h2>
+      <h2>➕ เพิ่มสมาชิก</h2>
 
-        <div class="input-row">
+      <div class="input-row">
 
-            <input
-                type="text"
-                id="memberName"
-                placeholder="กรอกชื่อสมาชิก"
-            >
+        <input
+          type="text"
+          id="memberName"
+          placeholder="กรอกชื่อนักท่องเที่ยว"
+        >
 
-            <button
-                class="add-button"
-                onclick="addMember()"
-            >
-                เพิ่มสมาชิก
-            </button>
+        <button
+          class="add-button"
+          onclick="addMember()"
+        >
+          เพิ่มสมาชิก
+        </button>
 
-        </div>
+      </div>
 
     </div>
 
+    <div id="memberList" class="member-list">
 
-    <!-- รายชื่อ -->
+      <div class="empty">
+        <div class="empty-icon">👥</div>
+        <p>กำลังโหลดรายชื่อ...</p>
+      </div>
 
-    <h2 class="member-title">
-        👥 รายชื่อสมาชิก
-    </h2>
-
-    <div id="memberList"></div>
-
-
-    <!-- กลับ -->
+    </div>
 
     <button
-        class="back-button"
-        onclick="goBack()"
+      class="back-button"
+      onclick="goBack()"
     >
-        ⬅️ กลับหน้ารถทัวร์
+      ← กลับหน้ารถทัวร์
     </button>
 
-
-</div>
-
-
-<script>
+  </div>
 
 
-    /* อ่านหมายเลขรถ */
+  <!-- Firebase + Firestore -->
+
+  <script type="module">
+
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      deleteDoc,
+      doc,
+      updateDoc,
+      onSnapshot
+    }
+      from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCyc7rXZ254ZPiLR6j-yKbsJSq3o9VahDw",
+
+      authDomain: "tourbuscheck2.firebaseapp.com",
+
+      projectId: "tourbuscheck2",
+
+      storageBucket: "tourbuscheck2.firebasestorage.app",
+
+      messagingSenderId: "151352354886",
+
+      appId: "1:151352354886:web:6c12aea5b9165149c1c247",
+
+      measurementId: "G-LBW7P3XDH1"
+
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+
+    const db = getFirestore(app);
+
+
+    // อ่านหมายเลขรถจาก URL
 
     const params =
-        new URLSearchParams(
-            window.location.search
-        );
+      new URLSearchParams(window.location.search);
 
     const busNumber =
-        params.get("bus") || "1";
+      params.get("bus") || "1";
 
 
-    document.getElementById("busTitle")
-        .textContent =
-        "รถทัวร์คันที่ " + busNumber;
+    document.getElementById("busTitle").textContent =
+      "รถทัวร์คันที่ " + busNumber;
 
 
-    /* ข้อมูลสมาชิก */
+    // ตำแหน่งเก็บข้อมูลของรถแต่ละคัน
+
+    const membersRef = collection(
+      db,
+      "buses",
+      "bus" + busNumber,
+      "members"
+    );
+
 
     let members = [];
 
 
-    /* เพิ่มสมาชิก */
+    // โหลดข้อมูลจาก Firestore แบบเรียลไทม์
 
-    function addMember() {
+    onSnapshot(
+      membersRef,
+      (snapshot) => {
 
-        const input =
-            document.getElementById(
-                "memberName"
-            );
+        members = snapshot.docs.map(
+          (item) => ({
+            id: item.id,
+            ...item.data()
+          })
+        );
 
-        const name =
-            input.value.trim();
+        displayMembers();
+
+      },
+      (error) => {
+
+        console.error(error);
+
+        alert(
+          "ไม่สามารถเชื่อมต่อฐานข้อมูลได้"
+        );
+
+      }
+    );
 
 
-        if (name === "") {
+    // เพิ่มสมาชิก
 
-            alert(
-                "กรุณากรอกชื่อสมาชิก"
-            );
+    window.addMember = async function () {
 
-            return;
-        }
+      const input =
+        document.getElementById("memberName");
+
+      const name =
+        input.value.trim();
 
 
-        members.push({
+      if (name === "") {
 
+        alert("กรุณากรอกชื่อสมาชิก");
+
+        return;
+
+      }
+
+
+      try {
+
+        await addDoc(
+          membersRef,
+          {
             name: name,
-
             boarded: false
-
-        });
-
+          }
+        );
 
         input.value = "";
 
-        displayMembers();
+      } catch (error) {
 
-    }
+        console.error(error);
 
-
-    /* แสดงสมาชิก */
-
-    function displayMembers() {
-
-        const list =
-            document.getElementById(
-                "memberList"
-            );
-
-
-        list.innerHTML = "";
-
-
-        if (members.length === 0) {
-
-            list.innerHTML = `
-
-                <div class="empty">
-
-                    <div class="empty-icon">
-                        👥
-                    </div>
-
-                    <p>
-                        ยังไม่มีรายชื่อสมาชิก
-                    </p>
-
-                </div>
-
-            `;
-
-            updateSummary();
-
-            return;
-        }
-
-
-        members.forEach(
-            (member, index) => {
-
-                const div =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                div.className =
-                    "member-card";
-
-
-                div.innerHTML = `
-
-                    <div class="member-top">
-
-                        <div class="member-name">
-
-                            ${member.name}
-
-                        </div>
-
-                        <div class="
-                            status
-                            ${
-                                member.boarded
-                                ? "boarded"
-                                : "not-boarded"
-                            }
-                        ">
-
-                            ${
-                                member.boarded
-                                ? "✅ ขึ้นรถแล้ว"
-                                : "⏳ ยังไม่ขึ้นรถ"
-                            }
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="button-row">
-
-                        <button
-                            class="check-button"
-                            onclick="
-                                toggleBoarding(${index})
-                            "
-                        >
-
-                            ${
-                                member.boarded
-                                ? "↩️ เปลี่ยนสถานะ"
-                                : "✅ เช็กขึ้นรถ"
-                            }
-
-                        </button>
-
-
-                        <button
-                            class="edit-button"
-                            onclick="
-                                editMember(${index})
-                            "
-                        >
-
-                            ✏️ แก้ไข
-
-                        </button>
-
-
-                        <button
-                            class="delete-button"
-                            onclick="
-                                deleteMember(${index})
-                            "
-                        >
-
-                            🗑️ ลบ
-
-                        </button>
-
-                    </div>
-
-                `;
-
-
-                list.appendChild(div);
-
-            }
+        alert(
+          "ไม่สามารถเพิ่มสมาชิกได้"
         );
 
+      }
 
-        updateSummary();
-
-    }
-
-
-    /* เช็กสถานะ */
-
-    function toggleBoarding(index) {
-
-        members[index].boarded =
-            !members[index].boarded;
-
-        displayMembers();
-
-    }
+    };
 
 
-    /* แก้ไข */
+    // เปลี่ยนสถานะขึ้นรถ
 
-    function editMember(index) {
+    window.toggleBoarding =
+      async function (
+        id,
+        currentStatus
+      ) {
+
+        try {
+
+          await updateDoc(
+            doc(membersRef, id),
+            {
+              boarded: !currentStatus
+            }
+          );
+
+        } catch (error) {
+
+          console.error(error);
+
+          alert(
+            "ไม่สามารถเปลี่ยนสถานะได้"
+          );
+
+        }
+
+      };
+
+
+    // แก้ไขชื่อสมาชิก
+
+    window.editMember =
+      async function (
+        id,
+        oldName
+      ) {
 
         const newName =
-            prompt(
-                "แก้ไขชื่อสมาชิก",
-                members[index].name
-            );
+          prompt(
+            "แก้ไขชื่อสมาชิก",
+            oldName
+          );
 
 
         if (newName === null) {
-            return;
+
+          return;
+
         }
 
 
         const name =
-            newName.trim();
+          newName.trim();
 
 
         if (name === "") {
 
-            alert(
-                "กรุณากรอกชื่อสมาชิก"
-            );
+          alert(
+            "กรุณากรอกชื่อสมาชิก"
+          );
 
-            return;
+          return;
+
         }
 
 
-        members[index].name =
-            name;
+        try {
+
+          await updateDoc(
+            doc(membersRef, id),
+            {
+              name: name
+            }
+          );
+
+        } catch (error) {
+
+          console.error(error);
+
+          alert(
+            "ไม่สามารถแก้ไขชื่อได้"
+          );
+
+        }
+
+      };
 
 
-        displayMembers();
+    // ลบสมาชิก
 
-    }
-
-
-    /* ลบ */
-
-    function deleteMember(index) {
+    window.deleteMember =
+      async function (id) {
 
         if (
-            !confirm(
-                "ต้องการลบสมาชิกคนนี้หรือไม่?"
-            )
+          !confirm(
+            "ต้องการลบสมาชิกคนนี้หรือไม่?"
+          )
         ) {
 
-            return;
+          return;
+
         }
 
 
-        members.splice(index, 1);
+        try {
 
-        displayMembers();
+          await deleteDoc(
+            doc(membersRef, id)
+          );
+
+        } catch (error) {
+
+          console.error(error);
+
+          alert(
+            "ไม่สามารถลบสมาชิกได้"
+          );
+
+        }
+
+      };
+
+
+    // แสดงรายชื่อ
+
+    function displayMembers() {
+
+      const list =
+        document.getElementById(
+          "memberList"
+        );
+
+
+      list.innerHTML = "";
+
+
+      if (members.length === 0) {
+
+        list.innerHTML = `
+
+          <div class="empty">
+
+            <div class="empty-icon">
+              👥
+            </div>
+
+            <p>
+              ยังไม่มีรายชื่อสมาชิก
+            </p>
+
+          </div>
+
+        `;
+
+        updateSummary();
+
+        return;
+
+      }
+
+
+      members.forEach(
+        (member) => {
+
+          const div =
+            document.createElement(
+              "div"
+            );
+
+          div.className =
+            "member-card";
+
+
+          const top =
+            document.createElement(
+              "div"
+            );
+
+          top.className =
+            "member-top";
+
+
+          const name =
+            document.createElement(
+              "div"
+            );
+
+          name.className =
+            "member-name";
+
+          name.textContent =
+            member.name;
+
+
+          const status =
+            document.createElement(
+              "div"
+            );
+
+          status.className =
+            "status " +
+            (
+              member.boarded
+                ? "boarded"
+                : "not-boarded"
+            );
+
+
+          status.textContent =
+            member.boarded
+              ? "✅ ขึ้นรถแล้ว"
+              : "⏳ ยังไม่ขึ้นรถ";
+
+
+          top.appendChild(name);
+
+          top.appendChild(status);
+
+
+          const buttons =
+            document.createElement(
+              "div"
+            );
+
+          buttons.className =
+            "button-row";
+
+
+          const checkButton =
+            document.createElement(
+              "button"
+            );
+
+          checkButton.className =
+            "check-button";
+
+
+          checkButton.textContent =
+            member.boarded
+              ? "↩️ เปลี่ยนสถานะ"
+              : "✅ เช็กขึ้นรถ";
+
+
+          checkButton.onclick =
+            () =>
+              toggleBoarding(
+                member.id,
+                member.boarded
+              );
+
+
+          const editButton =
+            document.createElement(
+              "button"
+            );
+
+          editButton.className =
+            "edit-button";
+
+          editButton.textContent =
+            "✏️ แก้ไข";
+
+
+          editButton.onclick =
+            () =>
+              editMember(
+                member.id,
+                member.name
+              );
+
+
+          const deleteButton =
+            document.createElement(
+              "button"
+            );
+
+          deleteButton.className =
+            "delete-button";
+
+          deleteButton.textContent =
+            "🗑️ ลบ";
+
+
+          deleteButton.onclick =
+            () =>
+              deleteMember(
+                member.id
+              );
+
+
+          buttons.appendChild(
+            checkButton
+          );
+
+          buttons.appendChild(
+            editButton
+          );
+
+          buttons.appendChild(
+            deleteButton
+          );
+
+
+          div.appendChild(top);
+
+          div.appendChild(buttons);
+
+
+          list.appendChild(div);
+
+        }
+      );
+
+
+      updateSummary();
 
     }
 
 
-    /* สรุปจำนวน */
+    // อัปเดตจำนวนสมาชิก
 
     function updateSummary() {
 
-        const total =
-            members.length;
+      const total =
+        members.length;
 
 
-        const boarded =
-            members.filter(
-                member =>
-                    member.boarded
-            ).length;
+      const boarded =
+        members.filter(
+          (member) =>
+            member.boarded
+        ).length;
 
 
-        const notBoarded =
-            total - boarded;
+      const notBoarded =
+        total - boarded;
 
 
-        document.getElementById(
-            "total"
-        ).textContent = total;
+      document.getElementById(
+        "total"
+      ).textContent = total;
 
 
-        document.getElementById(
-            "boarded"
-        ).textContent = boarded;
+      document.getElementById(
+        "boarded"
+      ).textContent = boarded;
 
 
-        document.getElementById(
-            "notBoarded"
-        ).textContent = notBoarded;
+      document.getElementById(
+        "notBoarded"
+      ).textContent =
+        notBoarded;
 
     }
 
 
-    /* กลับ Dashboard */
+    // กลับหน้ารถทัวร์
 
-    function goBack() {
+    window.goBack =
+      function () {
 
         window.location.href =
-            "dashboard.html";
+          "dashboard.html";
 
-    }
+      };
 
-
-    /* เริ่มต้น */
-
-    displayMembers();
-
-
-</script>
-
+  </script>
 
 </body>
-
 </html>
