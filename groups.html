@@ -398,6 +398,36 @@
     };
 
   </script>
+<div class="box">
+  <h2>📢 ส่งข้อความแจ้งข่าวสาร</h2>
 
+  <select id="announcementGroup">
+    <option value="">-- เลือกกลุ่ม --</option>
+  </select>
+
+  <textarea
+    id="announcementMessage"
+    placeholder="พิมพ์ข้อความแจ้งข่าวสาร เช่น รถทัวร์จะออกเวลา 18:00 น."
+    style="
+      width:100%;
+      box-sizing:border-box;
+      min-height:120px;
+      padding:12px;
+      margin-top:10px;
+      border-radius:10px;
+      border:1px solid #ccc;
+      font-size:16px;
+      resize:vertical;
+    "
+  ></textarea>
+
+  <button onclick="sendAnnouncement()">
+    📢 ส่งประกาศ
+  </button>
+
+  <div id="announcementList" style="margin-top:20px;">
+    ยังไม่มีประกาศ
+  </div>
+</div>
 </body>
 </html>
