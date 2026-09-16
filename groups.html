@@ -227,8 +227,18 @@
         div.innerHTML = `
           <strong>👥 ${data.name}</strong>
           <div id="members-${item.id}">
-            สมาชิกในกลุ่ม: ${data.members?.length || 0} คน
+  สมาชิกในกลุ่ม: ${data.members?.length || 0} คน
+
+  ${
+    data.members && data.members.length > 0
+      ? data.members.map(member => `
+          <div class="member">
+            👤 ${member.name} — รถทัวร์คันที่ ${member.bus}
           </div>
+        `).join("")
+      : "<div class='member'>ยังไม่มีสมาชิกในกลุ่ม</div>"
+  }
+</div>
           <button class="delete"
             onclick="deleteGroup('${item.id}')">
             ลบกลุ่ม
