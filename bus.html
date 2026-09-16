@@ -304,8 +304,11 @@
       doc,
       updateDoc,
       onSnapshot
-    }
-      from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+    import { 
+      getAuth
+    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
 
     const firebaseConfig = {
@@ -328,8 +331,9 @@
 
 
     const app = initializeApp(firebaseConfig);
-
     const db = getFirestore(app);
+    const auth = getAuth(app);
+    
 
 
     // อ่านหมายเลขรถจาก URL
@@ -389,33 +393,43 @@
     // เพิ่มสมาชิก
 
     window.addMember = async function () {
+  const user = auth.currentUser;
 
-      const input =
-        document.getElementById("memberName");
+  // ตรวจสอบว่าล็อกอินอยู่หรือไม่
+  if (!user) {
+    alert("ยังไม่ได้เข้าสู่ระบบ\nกรุณากลับไปหน้า Login แล้วเข้าสู่ระบบก่อน");
+    window.location.href = "login.html";
+    return;
+  }
 
-      const name =
-        input.value.trim();
+  const input = document.getElementById("memberName");
+  const name = input.value.trim();
 
+  if (name === "") {
+    alert("กรุณากรอกชื่อสมาชิก");
+    return;
+  }
 
-      if (name === "") {
+  try {
+    await addDoc(membersRef, {
+      name: name,
+      boarded: false
+    });
 
-        alert("กรุณากรอกชื่อสมาชิก");
+    input.value = "";
 
-        return;
+    alert("เพิ่มสมาชิกสำเร็จ ✅");
 
-      }
+  } catch (error) {
+    console.error("Firebase Error:", error);
 
-
-      try {
-
-        await addDoc(
-          membersRef,
-          {
-            name: name,
-            boarded: false
-          }
-        );
-
+    alert(
+      "เพิ่มสมาชิกไม่ได้ ❌\n\n" +
+      "รหัสข้อผิดพลาด: " + error.code + "\n\n" +
+      "รายละเอียด: " + error.message
+    );
+  }
+};
         input.value = "";
 
       } catch (error) {
