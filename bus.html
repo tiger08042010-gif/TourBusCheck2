@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>รายชื่อสมาชิก - Tour Bus Check</title>
+  <title>Tour Bus Check</title>
 
   <style>
     * {
@@ -16,12 +15,14 @@
       font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
       color: #333;
+      min-height: 100vh;
+      padding: 20px;
     }
 
     .container {
-      width: 92%;
+      width: 100%;
       max-width: 900px;
-      margin: 30px auto;
+      margin: 0 auto;
     }
 
     .header {
@@ -97,6 +98,11 @@
       font-size: 16px;
     }
 
+    input:focus {
+      outline: none;
+      border-color: #1976d2;
+    }
+
     button {
       border: none;
       border-radius: 12px;
@@ -157,6 +163,7 @@
       display: flex;
       gap: 8px;
       margin-top: 15px;
+      flex-wrap: wrap;
     }
 
     .check-button {
@@ -195,6 +202,12 @@
       margin-bottom: 10px;
     }
 
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #777;
+    }
+
     @media (max-width: 650px) {
       .summary {
         grid-template-columns: 1fr;
@@ -209,8 +222,8 @@
         align-items: flex-start;
       }
 
-      .button-row {
-        flex-wrap: wrap;
+      .button-row button {
+        flex: 1;
       }
     }
   </style>
@@ -220,36 +233,64 @@
 
   <div class="container">
 
+    <!-- ส่วนหัว -->
     <div class="header">
       <div class="bus-icon">🚌</div>
-      <h1 id="busTitle">รถทัวร์คันที่ 1</h1>
+
+      <h1 id="busTitle">
+        กำลังโหลด...
+      </h1>
+
       <div class="subtitle">
         ระบบเช็กชื่อสมาชิกในรถทัวร์
       </div>
     </div>
 
+
+    <!-- สรุปจำนวนสมาชิก -->
     <div class="summary">
 
       <div class="summary-card">
-        <div class="summary-number" id="total">0</div>
-        <div class="summary-title">สมาชิกทั้งหมด</div>
+        <div class="summary-number" id="total">
+          0
+        </div>
+
+        <div class="summary-title">
+          สมาชิกทั้งหมด
+        </div>
       </div>
 
-      <div class="summary-card">
-        <div class="summary-number" id="boarded">0</div>
-        <div class="summary-title">ขึ้นรถแล้ว</div>
-      </div>
 
       <div class="summary-card">
-        <div class="summary-number" id="notBoarded">0</div>
-        <div class="summary-title">ยังไม่ขึ้นรถ</div>
+        <div class="summary-number" id="boarded">
+          0
+        </div>
+
+        <div class="summary-title">
+          ขึ้นรถแล้ว
+        </div>
+      </div>
+
+
+      <div class="summary-card">
+        <div class="summary-number" id="notBoarded">
+          0
+        </div>
+
+        <div class="summary-title">
+          ยังไม่ขึ้นรถ
+        </div>
       </div>
 
     </div>
 
+
+    <!-- เพิ่มสมาชิก -->
     <div class="add-box">
 
-      <h2>➕ เพิ่มสมาชิก</h2>
+      <h2>
+        ➕ เพิ่มสมาชิก
+      </h2>
 
       <div class="input-row">
 
@@ -270,15 +311,18 @@
 
     </div>
 
-    <div id="memberList" class="member-list">
 
-      <div class="empty">
-        <div class="empty-icon">👥</div>
-        <p>กำลังโหลดรายชื่อ...</p>
+    <!-- รายชื่อสมาชิก -->
+    <div id="memberList">
+
+      <div class="loading">
+        กำลังโหลดรายชื่อ...
       </div>
 
     </div>
 
+
+    <!-- กลับหน้า Dashboard -->
     <button
       class="back-button"
       onclick="goBack()"
@@ -289,12 +333,14 @@
   </div>
 
 
-  <!-- Firebase + Firestore -->
-
+  <!-- Firebase -->
   <script type="module">
 
-    import { initializeApp }
-      from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+    import {
+      initializeApp
+    }
+    from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+
 
     import {
       getFirestore,
@@ -304,150 +350,258 @@
       doc,
       updateDoc,
       onSnapshot
-    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+    }
+    from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
-    import { 
+
+    import {
       getAuth
-    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+    }
+    from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
 
+    // Firebase Configuration
     const firebaseConfig = {
 
-      apiKey: "AIzaSyCyc7rXZ254ZPiLR6j-yKbsJSq3o9VahDw",
+      apiKey:
+        "AIzaSyCyc7rXZ254ZPiLR6j-yKbsJSq3o9VahDw",
 
-      authDomain: "tourbuscheck2.firebaseapp.com",
+      authDomain:
+        "tourbuscheck2.firebaseapp.com",
 
-      projectId: "tourbuscheck2",
+      projectId:
+        "tourbuscheck2",
 
-      storageBucket: "tourbuscheck2.firebasestorage.app",
+      storageBucket:
+        "tourbuscheck2.firebasestorage.app",
 
-      messagingSenderId: "151352354886",
+      messagingSenderId:
+        "151352354886",
 
-      appId: "1:151352354886:web:6c12aea5b9165149c1c247",
+      appId:
+        "1:151352354886:web:6c12aea5b9165149c1c247",
 
-      measurementId: "G-LBW7P3XDH1"
+      measurementId:
+        "G-LBW7P3XDH1"
 
     };
 
 
+    // เริ่ม Firebase
     const app = initializeApp(firebaseConfig);
+
     const db = getFirestore(app);
+
     const auth = getAuth(app);
-    
 
 
-    // อ่านหมายเลขรถจาก URL
+    // =====================================================
+    // ตรวจสอบหมายเลขรถจาก URL
+    // =====================================================
 
     const params =
-      new URLSearchParams(window.location.search);
+      new URLSearchParams(
+        window.location.search
+      );
+
 
     const busNumber =
-      params.get("bus") || "1";
+      params.get("bus");
 
 
-    document.getElementById("busTitle").textContent =
-      "รถทัวร์คันที่ " + busNumber;
+    // ต้องเป็นรถ 1-5 เท่านั้น
+    if (
+      !["1", "2", "3", "4", "5"]
+      .includes(busNumber)
+    ) {
+
+      alert(
+        "ไม่พบหมายเลขรถทัวร์"
+      );
+
+      window.location.href =
+        "dashboard.html";
+
+      throw new Error(
+        "Invalid bus number"
+      );
+    }
 
 
-    // ตำแหน่งเก็บข้อมูลของรถแต่ละคัน
+    // แสดงชื่อรถ
+    document.getElementById(
+      "busTitle"
+    ).textContent =
+      "รถทัวร์คันที่ " +
+      busNumber;
 
-    const membersRef = collection(
-      db,
-      "buses",
-      "bus" + busNumber,
-      "members"
-    );
+
+    // =====================================================
+    // Firestore
+    // =====================================================
+
+    const membersRef =
+      collection(
+        db,
+        "buses",
+        "bus" + busNumber,
+        "members"
+      );
 
 
     let members = [];
 
 
-    // โหลดข้อมูลจาก Firestore แบบเรียลไทม์
+    // =====================================================
+    // โหลดสมาชิกแบบ Real-time
+    // =====================================================
 
     onSnapshot(
+
       membersRef,
+
       (snapshot) => {
 
-        members = snapshot.docs.map(
-          (item) => ({
-            id: item.id,
-            ...item.data()
-          })
-        );
+        members =
+          snapshot.docs.map(
+            (item) => ({
+
+              id: item.id,
+
+              ...item.data()
+
+            })
+          );
+
 
         displayMembers();
 
       },
+
       (error) => {
 
-        console.error(error);
+        console.error(
+          "Firestore Error:",
+          error
+        );
+
 
         alert(
-          "ไม่สามารถเชื่อมต่อฐานข้อมูลได้"
+          "ไม่สามารถเชื่อมต่อฐานข้อมูลได้\n\n" +
+          "รหัส: " +
+          error.code +
+          "\n" +
+          "รายละเอียด: " +
+          error.message
         );
 
       }
+
     );
 
 
+    // =====================================================
     // เพิ่มสมาชิก
+    // =====================================================
 
-    window.addMember = async function () {
-  const user = auth.currentUser;
+    window.addMember =
+      async function () {
 
-  // ตรวจสอบว่าล็อกอินอยู่หรือไม่
-  if (!user) {
-    alert("ยังไม่ได้เข้าสู่ระบบ\nกรุณากลับไปหน้า Login แล้วเข้าสู่ระบบก่อน");
-    window.location.href = "login.html";
-    return;
-  }
-
-  const input = document.getElementById("memberName");
-  const name = input.value.trim();
-
-  if (name === "") {
-    alert("กรุณากรอกชื่อสมาชิก");
-    return;
-  }
-
-  try {
-    await addDoc(membersRef, {
-      name: name,
-      boarded: false
-    });
-
-    input.value = "";
-
-    alert("เพิ่มสมาชิกสำเร็จ ✅");
-
-  } catch (error) {
-    console.error("Firebase Error:", error);
-
-    alert(
-      "เพิ่มสมาชิกไม่ได้ ❌\n\n" +
-      "รหัสข้อผิดพลาด: " + error.code + "\n\n" +
-      "รายละเอียด: " + error.message
-    );
-  }
-};
-        input.value = "";
-
-      } catch (error) {
-
-  console.error("เพิ่มสมาชิกไม่สำเร็จ:", error);
-
-  alert(
-  "ไม่สามารถเพิ่มสมาชิกได้\n\n" +
-  "รหัส: " + error.code +
-  "\nรายละเอียด: " + error.message
-);
-
-}
-
-    };
+        // ตรวจสอบการ Login
+        const user =
+          auth.currentUser;
 
 
+        if (!user) {
+
+          alert(
+            "ยังไม่ได้เข้าสู่ระบบ\n\n" +
+            "กรุณากลับไปหน้า Login ก่อน"
+          );
+
+          return;
+
+        }
+
+
+        const input =
+          document.getElementById(
+            "memberName"
+          );
+
+
+        const name =
+          input.value.trim();
+
+
+        if (name === "") {
+
+          alert(
+            "กรุณากรอกชื่อสมาชิก"
+          );
+
+          return;
+
+        }
+
+
+        try {
+
+          await addDoc(
+
+            membersRef,
+
+            {
+
+              name: name,
+
+              boarded: false
+
+            }
+
+          );
+
+
+          input.value = "";
+
+
+          alert(
+            "เพิ่มสมาชิกสำเร็จ ✅"
+          );
+
+
+        }
+
+        catch (error) {
+
+          console.error(
+            "Add member error:",
+            error
+          );
+
+
+          alert(
+
+            "ไม่สามารถเพิ่มสมาชิกได้\n\n" +
+
+            "รหัส: " +
+            error.code +
+
+            "\n\n" +
+
+            "รายละเอียด: " +
+            error.message
+
+          );
+
+        }
+
+      };
+
+
+    // =====================================================
     // เปลี่ยนสถานะขึ้นรถ
+    // =====================================================
 
     window.toggleBoarding =
       async function (
@@ -458,18 +612,35 @@
         try {
 
           await updateDoc(
-            doc(membersRef, id),
+
+            doc(
+              membersRef,
+              id
+            ),
+
             {
-              boarded: !currentStatus
+
+              boarded:
+                !currentStatus
+
             }
+
           );
 
-        } catch (error) {
+        }
 
-          console.error(error);
+        catch (error) {
+
+          console.error(
+            error
+          );
 
           alert(
-            "ไม่สามารถเปลี่ยนสถานะได้"
+
+            "ไม่สามารถเปลี่ยนสถานะได้\n\n" +
+
+            error.message
+
           );
 
         }
@@ -477,7 +648,9 @@
       };
 
 
-    // แก้ไขชื่อสมาชิก
+    // =====================================================
+    // แก้ไขชื่อ
+    // =====================================================
 
     window.editMember =
       async function (
@@ -492,7 +665,9 @@
           );
 
 
-        if (newName === null) {
+        if (
+          newName === null
+        ) {
 
           return;
 
@@ -517,18 +692,34 @@
         try {
 
           await updateDoc(
-            doc(membersRef, id),
+
+            doc(
+              membersRef,
+              id
+            ),
+
             {
+
               name: name
+
             }
+
           );
 
-        } catch (error) {
+        }
 
-          console.error(error);
+        catch (error) {
+
+          console.error(
+            error
+          );
 
           alert(
-            "ไม่สามารถแก้ไขชื่อได้"
+
+            "ไม่สามารถแก้ไขชื่อได้\n\n" +
+
+            error.message
+
           );
 
         }
@@ -536,7 +727,9 @@
       };
 
 
+    // =====================================================
     // ลบสมาชิก
+    // =====================================================
 
     window.deleteMember =
       async function (id) {
@@ -555,15 +748,28 @@
         try {
 
           await deleteDoc(
-            doc(membersRef, id)
+
+            doc(
+              membersRef,
+              id
+            )
+
           );
 
-        } catch (error) {
+        }
 
-          console.error(error);
+        catch (error) {
+
+          console.error(
+            error
+          );
 
           alert(
-            "ไม่สามารถลบสมาชิกได้"
+
+            "ไม่สามารถลบสมาชิกได้\n\n" +
+
+            error.message
+
           );
 
         }
@@ -571,7 +777,9 @@
       };
 
 
+    // =====================================================
     // แสดงรายชื่อ
+    // =====================================================
 
     function displayMembers() {
 
@@ -584,7 +792,9 @@
       list.innerHTML = "";
 
 
-      if (members.length === 0) {
+      if (
+        members.length === 0
+      ) {
 
         list.innerHTML = `
 
@@ -602,6 +812,7 @@
 
         `;
 
+
         updateSummary();
 
         return;
@@ -617,6 +828,7 @@
               "div"
             );
 
+
           div.className =
             "member-card";
 
@@ -625,6 +837,7 @@
             document.createElement(
               "div"
             );
+
 
           top.className =
             "member-top";
@@ -635,8 +848,10 @@
               "div"
             );
 
+
           name.className =
             "member-name";
+
 
           name.textContent =
             member.name;
@@ -647,8 +862,10 @@
               "div"
             );
 
+
           status.className =
             "status " +
+
             (
               member.boarded
                 ? "boarded"
@@ -657,14 +874,21 @@
 
 
           status.textContent =
+
             member.boarded
+
               ? "✅ ขึ้นรถแล้ว"
+
               : "⏳ ยังไม่ขึ้นรถ";
 
 
-          top.appendChild(name);
+          top.appendChild(
+            name
+          );
 
-          top.appendChild(status);
+          top.appendChild(
+            status
+          );
 
 
           const buttons =
@@ -672,22 +896,28 @@
               "div"
             );
 
+
           buttons.className =
             "button-row";
 
 
+          // ปุ่มเช็กขึ้นรถ
           const checkButton =
             document.createElement(
               "button"
             );
+
 
           checkButton.className =
             "check-button";
 
 
           checkButton.textContent =
+
             member.boarded
+
               ? "↩️ เปลี่ยนสถานะ"
+
               : "✅ เช็กขึ้นรถ";
 
 
@@ -699,13 +929,16 @@
               );
 
 
+          // ปุ่มแก้ไข
           const editButton =
             document.createElement(
               "button"
             );
 
+
           editButton.className =
             "edit-button";
+
 
           editButton.textContent =
             "✏️ แก้ไข";
@@ -719,13 +952,16 @@
               );
 
 
+          // ปุ่มลบ
           const deleteButton =
             document.createElement(
               "button"
             );
 
+
           deleteButton.className =
             "delete-button";
+
 
           deleteButton.textContent =
             "🗑️ ลบ";
@@ -742,21 +978,30 @@
             checkButton
           );
 
+
           buttons.appendChild(
             editButton
           );
+
 
           buttons.appendChild(
             deleteButton
           );
 
 
-          div.appendChild(top);
+          div.appendChild(
+            top
+          );
 
-          div.appendChild(buttons);
+
+          div.appendChild(
+            buttons
+          );
 
 
-          list.appendChild(div);
+          list.appendChild(
+            div
+          );
 
         }
       );
@@ -767,7 +1012,9 @@
     }
 
 
-    // อัปเดตจำนวนสมาชิก
+    // =====================================================
+    // สรุปจำนวน
+    // =====================================================
 
     function updateSummary() {
 
@@ -778,7 +1025,7 @@
       const boarded =
         members.filter(
           (member) =>
-            member.boarded
+            member.boarded === true
         ).length;
 
 
@@ -788,12 +1035,14 @@
 
       document.getElementById(
         "total"
-      ).textContent = total;
+      ).textContent =
+        total;
 
 
       document.getElementById(
         "boarded"
-      ).textContent = boarded;
+      ).textContent =
+        boarded;
 
 
       document.getElementById(
@@ -804,7 +1053,9 @@
     }
 
 
-    // กลับหน้ารถทัวร์
+    // =====================================================
+    // กลับหน้า Dashboard
+    // =====================================================
 
     window.goBack =
       function () {
