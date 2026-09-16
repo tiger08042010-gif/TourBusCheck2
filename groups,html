@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>กลุ่มสมาชิก - Tour Bus Check</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+      color: #333;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 900px;
+      margin: 30px auto;
+    }
+
+    .header {
+      background: white;
+      padding: 25px;
+      border-radius: 25px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .icon {
+      font-size: 55px;
+    }
+
+    h1 {
+      color: #1976d2;
+      margin: 10px 0 5px;
+    }
+
+    .subtitle {
+      color: #777;
+    }
+
+    .group-box {
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .group-box h2 {
+      margin-top: 0;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    input {
+      flex: 1;
+      padding: 14px;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      font-size: 16px;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .add-button {
+      background: #1976d2;
+      color: white;
+      font-weight: bold;
+    }
+
+    .group-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .group-card {
+      background: white;
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .group-name {
+      font-size: 19px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .group-info {
+      color: #777;
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    .delete-button {
+      background: #e53935;
+      color: white;
+    }
+
+    .back-button {
+      width: 100%;
+      margin-top: 20px;
+      background: #555;
+      color: white;
+      padding: 15px;
+    }
+
+    .empty {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      color: #777;
+    }
+
+    .empty-icon {
+      font-size: 50px;
+    }
+
+    @media (max-width: 600px) {
+
+      .input-row {
+        flex-direction: column;
+      }
+
+      .group-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .delete-button {
+        width: 100%;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="header">
+
+      <div class="icon">👥</div>
+
+      <h1>กลุ่มสมาชิก</h1>
+
+      <div class="subtitle">
+        ระบบจัดกลุ่มสมาชิกสำหรับการเดินทาง
+      </div>
+
+    </div>
+
+
+    <div class="group-box">
+
+      <h2>➕ สร้างกลุ่มใหม่</h2>
+
+      <div class="input-row">
+
+        <input
+          type="text"
+          id="groupName"
+          placeholder="เช่น คณะท่องเที่ยว A"
+        >
+
+        <button
+          class="add-button"
+          onclick="addGroup()"
+        >
+          สร้างกลุ่ม
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div id="groupList" class="group-list">
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          👥
+        </div>
+
+        <p>
+          กำลังโหลดกลุ่ม...
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <button
+      class="back-button"
+      onclick="goBack()"
+    >
+      ← กลับหน้ารถทัวร์
+    </button>
+
+  </div>
+
+
+  <script type="module">
+
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      deleteDoc,
+      doc,
+      onSnapshot
+    }
+      from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCyc7rXZ254ZPiLR6j-yKbsJSq3o9VahDw",
+
+      authDomain: "tourbuscheck2.firebaseapp.com",
+
+      projectId: "tourbuscheck2",
+
+      storageBucket: "tourbuscheck2.firebasestorage.app",
+
+      messagingSenderId: "151352354886",
+
+      appId: "1:151352354886:web:6c12aea5b9165149c1c247",
+
+      measurementId: "G-LBW7P3XDH1"
+
+    };
+
+
+    const app =
+      initializeApp(firebaseConfig);
+
+    const db =
+      getFirestore(app);
+
+
+    const groupsRef =
+      collection(db, "groups");
+
+
+    let groups = [];
+
+
+    // โหลดกลุ่มจาก Firebase
+
+    onSnapshot(
+      groupsRef,
+      (snapshot) => {
+
+        groups =
+          snapshot.docs.map(
+            (item) => ({
+              id: item.id,
+              ...item.data()
+            })
+          );
+
+        displayGroups();
+
+      },
+      (error) => {
+
+        console.error(error);
+
+        alert(
+          "ไม่สามารถเชื่อมต่อฐานข้อมูลได้"
+        );
+
+      }
+    );
+
+
+    // สร้างกลุ่ม
+
+    window.addGroup =
+      async function () {
+
+        const input =
+          document.getElementById(
+            "groupName"
+          );
+
+        const name =
+          input.value.trim();
+
+
+        if (name === "") {
+
+          alert(
+            "กรุณากรอกชื่อกลุ่ม"
+          );
+
+          return;
+
+        }
+
+
+        try {
+
+          await addDoc(
+            groupsRef,
+            {
+              name: name
+            }
+          );
+
+          input.value = "";
+
+        } catch (error) {
+
+          console.error(error);
+
+          alert(
+            "ไม่สามารถสร้างกลุ่มได้"
+          );
+
+        }
+
+      };
+
+
+    // ลบกลุ่ม
+
+    window.deleteGroup =
+      async function (id) {
+
+        if (
+          !confirm(
+            "ต้องการลบกลุ่มนี้หรือไม่?"
+          )
+        ) {
+
+          return;
+
+        }
+
+
+        try {
+
+          await deleteDoc(
+            doc(groupsRef, id)
+          );
+
+        } catch (error) {
+
+          console.error(error);
+
+          alert(
+            "ไม่สามารถลบกลุ่มได้"
+          );
+
+        }
+
+      };
+
+
+    // แสดงกลุ่ม
+
+    function displayGroups() {
+
+      const list =
+        document.getElementById(
+          "groupList"
+        );
+
+
+      list.innerHTML = "";
+
+
+      if (groups.length === 0) {
+
+        list.innerHTML = `
+
+          <div class="empty">
+
+            <div class="empty-icon">
+              👥
+            </div>
+
+            <p>
+              ยังไม่มีกลุ่มสมาชิก
+            </p>
+
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+
+      groups.forEach(
+        (group) => {
+
+          const card =
+            document.createElement(
+              "div"
+            );
+
+          card.className =
+            "group-card";
+
+
+          const info =
+            document.createElement(
+              "div"
+            );
+
+
+          const name =
+            document.createElement(
+              "div"
+            );
+
+          name.className =
+            "group-name";
+
+          name.textContent =
+            "👥 " + group.name;
+
+
+          const description =
+            document.createElement(
+              "div"
+            );
+
+          description.className =
+            "group-info";
+
+          description.textContent =
+            "กลุ่มสมาชิกสำหรับการเดินทาง";
+
+
+          info.appendChild(name);
+
+          info.appendChild(
+            description
+          );
+
+
+          const deleteButton =
+            document.createElement(
+              "button"
+            );
+
+          deleteButton.className =
+            "delete-button";
+
+          deleteButton.textContent =
+            "🗑️ ลบ";
+
+
+          deleteButton.onclick =
+            () =>
+              deleteGroup(
+                group.id
+              );
+
+
+          card.appendChild(info);
+
+          card.appendChild(
+            deleteButton
+          );
+
+
+          list.appendChild(card);
+
+        }
+      );
+
+    }
+
+
+    // กลับหน้ารถทัวร์
+
+    window.goBack =
+      function () {
+
+        window.location.href =
+          "dashboard.html";
+
+      };
+
+  </script>
+
+</body>
+</html>
