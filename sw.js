@@ -1,7 +1,6 @@
-const CACHE_NAME = "tour-bus-check-v2";
+const CACHE_NAME = "tour-bus-check-v3";
 
 const FILES_TO_CACHE = [
-  "./",
   "./login.html",
   "./dashboard.html",
   "./bus.html",
@@ -15,6 +14,22 @@ self.addEventListener("install", (event) => {
       return cache.addAll(FILES_TO_CACHE);
     })
   );
+
+  self.skipWaiting();
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames
+          .filter((name) => name !== CACHE_NAME)
+          .map((name) => caches.delete(name))
+      );
+    })
+  );
+
+  self.clients.claim();
 });
 
 self.addEventListener("fetch", (event) => {
