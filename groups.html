@@ -3,228 +3,136 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>กลุ่มสมาชิก - Tour Bus Check</title>
+  <title>จัดการกลุ่มสมาชิก</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+      background: #f3f8ff;
+      margin: 0;
+      padding: 20px;
       color: #333;
     }
 
-    .container {
-      width: 92%;
-      max-width: 900px;
-      margin: 30px auto;
-    }
-
-    .header {
-      background: white;
-      padding: 25px;
-      border-radius: 25px;
-      text-align: center;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-      margin-bottom: 20px;
-    }
-
-    .icon {
-      font-size: 55px;
-    }
-
     h1 {
+      text-align: center;
       color: #1976d2;
-      margin: 10px 0 5px;
     }
 
-    .subtitle {
-      color: #777;
-    }
-
-    .group-box {
+    .box {
+      max-width: 700px;
+      margin: 20px auto;
       background: white;
       padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-      margin-bottom: 20px;
+      border-radius: 18px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
-    .group-box h2 {
-      margin-top: 0;
-    }
-
-    .input-row {
-      display: flex;
-      gap: 10px;
-    }
-
-    input {
-      flex: 1;
-      padding: 14px;
-      border: 2px solid #ddd;
-      border-radius: 12px;
+    input, select, button {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
       font-size: 16px;
     }
 
     button {
-      border: none;
-      border-radius: 12px;
-      padding: 12px 18px;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    .add-button {
       background: #1976d2;
       color: white;
+      border: none;
+      cursor: pointer;
       font-weight: bold;
     }
 
-    .group-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+    button:hover {
+      background: #125aa0;
     }
 
-    .group-card {
+    .group {
+      background: #e8f2ff;
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 12px;
+    }
+
+    .member {
       background: white;
-      padding: 20px;
-      border-radius: 18px;
-      box-shadow: 0 5px 12px rgba(0,0,0,0.08);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
+      padding: 10px;
+      margin-top: 8px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
     }
 
-    .group-name {
-      font-size: 19px;
-      font-weight: bold;
-      color: #333;
-    }
-
-    .group-info {
-      color: #777;
-      margin-top: 5px;
-      font-size: 14px;
-    }
-
-    .delete-button {
+    .delete {
       background: #e53935;
-      color: white;
+      margin-top: 8px;
     }
 
-    .back-button {
-      width: 100%;
-      margin-top: 20px;
+    .back {
+      display: block;
+      max-width: 700px;
+      margin: 20px auto;
+      text-align: center;
+      text-decoration: none;
       background: #555;
       color: white;
-      padding: 15px;
-    }
-
-    .empty {
-      background: white;
-      padding: 40px;
-      border-radius: 20px;
-      text-align: center;
-      color: #777;
-    }
-
-    .empty-icon {
-      font-size: 50px;
-    }
-
-    @media (max-width: 600px) {
-
-      .input-row {
-        flex-direction: column;
-      }
-
-      .group-card {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .delete-button {
-        width: 100%;
-      }
-
+      padding: 12px;
+      border-radius: 10px;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="container">
+  <h1>👥 จัดการกลุ่มสมาชิก</h1>
 
-    <div class="header">
+  <div class="box">
+    <h2>➕ สร้างกลุ่มใหม่</h2>
 
-      <div class="icon">👥</div>
-
-      <h1>กลุ่มสมาชิก</h1>
-
-      <div class="subtitle">
-        ระบบจัดกลุ่มสมาชิกสำหรับการเดินทาง
-      </div>
-
-    </div>
-
-
-    <div class="group-box">
-
-      <h2>➕ สร้างกลุ่มใหม่</h2>
-
-      <div class="input-row">
-
-        <input
-          type="text"
-          id="groupName"
-          placeholder="เช่น คณะท่องเที่ยว A"
-        >
-
-        <button
-          class="add-button"
-          onclick="addGroup()"
-        >
-          สร้างกลุ่ม
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <div id="groupList" class="group-list">
-
-      <div class="empty">
-
-        <div class="empty-icon">
-          👥
-        </div>
-
-        <p>
-          กำลังโหลดกลุ่ม...
-        </p>
-
-      </div>
-
-    </div>
-
-
-    <button
-      class="back-button"
-      onclick="goBack()"
+    <input
+      type="text"
+      id="groupName"
+      placeholder="เช่น คณะท่องเที่ยว A"
     >
-      ← กลับหน้ารถทัวร์
-    </button>
 
+    <button onclick="createGroup()">สร้างกลุ่ม</button>
   </div>
 
+  <div class="box">
+    <h2>📋 กลุ่มของฉัน</h2>
+    <div id="groupsList">กำลังโหลด...</div>
+  </div>
+
+  <div class="box">
+    <h2>👤 เพิ่มสมาชิกเข้ากลุ่ม</h2>
+
+    <select id="groupSelect">
+      <option value="">-- เลือกกลุ่ม --</option>
+    </select>
+
+    <select id="busSelect">
+      <option value="">-- เลือกรถทัวร์ --</option>
+      <option value="1">รถทัวร์คันที่ 1</option>
+      <option value="2">รถทัวร์คันที่ 2</option>
+      <option value="3">รถทัวร์คันที่ 3</option>
+      <option value="4">รถทัวร์คันที่ 4</option>
+      <option value="5">รถทัวร์คันที่ 5</option>
+    </select>
+
+    <select id="memberSelect">
+      <option value="">-- เลือกสมาชิก --</option>
+    </select>
+
+    <button onclick="addMemberToGroup()">
+      เพิ่มสมาชิกเข้ากลุ่ม
+    </button>
+  </div>
+
+  <a class="back" href="dashboard.html">
+    ← กลับหน้า Dashboard
+  </a>
 
   <script type="module">
 
@@ -237,285 +145,247 @@
       addDoc,
       deleteDoc,
       doc,
-      onSnapshot
+      onSnapshot,
+      getDocs,
+      updateDoc,
+      arrayUnion
     }
       from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
 
     const firebaseConfig = {
-
       apiKey: "AIzaSyCyc7rXZ254ZPiLR6j-yKbsJSq3o9VahDw",
-
       authDomain: "tourbuscheck2.firebaseapp.com",
-
       projectId: "tourbuscheck2",
-
       storageBucket: "tourbuscheck2.firebasestorage.app",
-
       messagingSenderId: "151352354886",
-
       appId: "1:151352354886:web:6c12aea5b9165149c1c247",
-
       measurementId: "G-LBW7P3XDH1"
-
     };
 
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-    const app =
-      initializeApp(firebaseConfig);
-
-    const db =
-      getFirestore(app);
-
-
-    const groupsRef =
-      collection(db, "groups");
-
+    const groupsRef = collection(db, "groups");
 
     let groups = [];
 
 
-    // โหลดกลุ่มจาก Firebase
-
-    onSnapshot(
-      groupsRef,
-      (snapshot) => {
-
-        groups =
-          snapshot.docs.map(
-            (item) => ({
-              id: item.id,
-              ...item.data()
-            })
-          );
-
-        displayGroups();
-
-      },
-      (error) => {
-
-        console.error(error);
-
-        alert(
-          "ไม่สามารถเชื่อมต่อฐานข้อมูลได้"
-        );
-
-      }
-    );
-
-
+    // =========================
     // สร้างกลุ่ม
+    // =========================
 
-    window.addGroup =
-      async function () {
+    window.createGroup = async function() {
 
-        const input =
-          document.getElementById(
-            "groupName"
-          );
+      const input = document.getElementById("groupName");
+      const name = input.value.trim();
 
-        const name =
-          input.value.trim();
+      if (!name) {
+        alert("กรุณาใส่ชื่อกลุ่ม");
+        return;
+      }
 
+      await addDoc(groupsRef, {
+        name: name,
+        members: []
+      });
 
-        if (name === "") {
+      input.value = "";
 
-          alert(
-            "กรุณากรอกชื่อกลุ่ม"
-          );
-
-          return;
-
-        }
-
-
-        try {
-
-          await addDoc(
-            groupsRef,
-            {
-              name: name
-            }
-          );
-
-          input.value = "";
-
-        } catch (error) {
-
-          console.error(error);
-
-          alert(
-            "ไม่สามารถสร้างกลุ่มได้"
-          );
-
-        }
-
-      };
+      alert("สร้างกลุ่มเรียบร้อยแล้ว");
+    };
 
 
-    // ลบกลุ่ม
+    // =========================
+    // โหลดกลุ่ม
+    // =========================
 
-    window.deleteGroup =
-      async function (id) {
+    onSnapshot(groupsRef, (snapshot) => {
 
-        if (
-          !confirm(
-            "ต้องการลบกลุ่มนี้หรือไม่?"
-          )
-        ) {
+      groups = [];
 
-          return;
-
-        }
-
-
-        try {
-
-          await deleteDoc(
-            doc(groupsRef, id)
-          );
-
-        } catch (error) {
-
-          console.error(error);
-
-          alert(
-            "ไม่สามารถลบกลุ่มได้"
-          );
-
-        }
-
-      };
-
-
-    // แสดงกลุ่ม
-
-    function displayGroups() {
-
-      const list =
-        document.getElementById(
-          "groupList"
-        );
-
+      const list = document.getElementById("groupsList");
+      const select = document.getElementById("groupSelect");
 
       list.innerHTML = "";
+      select.innerHTML =
+        '<option value="">-- เลือกกลุ่ม --</option>';
 
+      snapshot.forEach((item) => {
 
-      if (groups.length === 0) {
+        const data = item.data();
 
-        list.innerHTML = `
+        groups.push({
+          id: item.id,
+          ...data
+        });
 
-          <div class="empty">
+        const div = document.createElement("div");
 
-            <div class="empty-icon">
-              👥
-            </div>
+        div.className = "group";
 
-            <p>
-              ยังไม่มีกลุ่มสมาชิก
-            </p>
-
+        div.innerHTML = `
+          <strong>👥 ${data.name}</strong>
+          <div id="members-${item.id}">
+            สมาชิกในกลุ่ม: ${data.members?.length || 0} คน
           </div>
-
+          <button class="delete"
+            onclick="deleteGroup('${item.id}')">
+            ลบกลุ่ม
+          </button>
         `;
 
-        return;
+        list.appendChild(div);
 
+        const option = document.createElement("option");
+
+        option.value = item.id;
+        option.textContent = data.name;
+
+        select.appendChild(option);
+      });
+
+    });
+
+
+    // =========================
+    // ลบกลุ่ม
+    // =========================
+
+    window.deleteGroup = async function(id) {
+
+      if (!confirm("ต้องการลบกลุ่มนี้หรือไม่?")) {
+        return;
       }
 
+      await deleteDoc(doc(db, "groups", id));
 
-      groups.forEach(
-        (group) => {
-
-          const card =
-            document.createElement(
-              "div"
-            );
-
-          card.className =
-            "group-card";
+    };
 
 
-          const info =
-            document.createElement(
-              "div"
-            );
+    // =========================
+    // เลือกรถ → โหลดสมาชิก
+    // =========================
 
+    document
+      .getElementById("busSelect")
+      .addEventListener("change", async function() {
 
-          const name =
-            document.createElement(
-              "div"
-            );
+        const busNumber = this.value;
 
-          name.className =
-            "group-name";
+        const memberSelect =
+          document.getElementById("memberSelect");
 
-          name.textContent =
-            "👥 " + group.name;
+        memberSelect.innerHTML =
+          '<option value="">-- เลือกสมาชิก --</option>';
 
+        if (!busNumber) return;
 
-          const description =
-            document.createElement(
-              "div"
-            );
-
-          description.className =
-            "group-info";
-
-          description.textContent =
-            "กลุ่มสมาชิกสำหรับการเดินทาง";
-
-
-          info.appendChild(name);
-
-          info.appendChild(
-            description
+        const membersRef =
+          collection(
+            db,
+            "buses",
+            `bus${busNumber}`,
+            "members"
           );
 
+        const snapshot = await getDocs(membersRef);
 
-          const deleteButton =
-            document.createElement(
-              "button"
-            );
+        snapshot.forEach((item) => {
 
-          deleteButton.className =
-            "delete-button";
+          const data = item.data();
 
-          deleteButton.textContent =
-            "🗑️ ลบ";
+          const option =
+            document.createElement("option");
 
+          option.value = item.id;
 
-          deleteButton.onclick =
-            () =>
-              deleteGroup(
-                group.id
-              );
+          option.textContent =
+            data.name || "ไม่มีชื่อ";
 
+          memberSelect.appendChild(option);
 
-          card.appendChild(info);
+        });
 
-          card.appendChild(
-            deleteButton
-          );
+      });
 
 
-          list.appendChild(card);
+    // =========================
+    // เพิ่มสมาชิกเข้ากลุ่ม
+    // =========================
 
+    window.addMemberToGroup = async function() {
+
+      const groupId =
+        document.getElementById("groupSelect").value;
+
+      const busNumber =
+        document.getElementById("busSelect").value;
+
+      const memberId =
+        document.getElementById("memberSelect").value;
+
+      if (!groupId || !busNumber || !memberId) {
+
+        alert("กรุณาเลือกกลุ่ม รถ และสมาชิกให้ครบ");
+
+        return;
+      }
+
+      const memberRef =
+        doc(
+          db,
+          "buses",
+          `bus${busNumber}`,
+          "members",
+          memberId
+        );
+
+      const memberSnapshot =
+        await getDocs(
+          collection(
+            db,
+            "buses",
+            `bus${busNumber}`,
+            "members"
+          )
+        );
+
+      let memberData = null;
+
+      memberSnapshot.forEach((item) => {
+
+        if (item.id === memberId) {
+          memberData = item.data();
         }
-      );
 
-    }
+      });
 
+      if (!memberData) {
+        alert("ไม่พบข้อมูลสมาชิก");
+        return;
+      }
 
-    // กลับหน้ารถทัวร์
+      const groupRef =
+        doc(db, "groups", groupId);
 
-    window.goBack =
-      function () {
+      await updateDoc(groupRef, {
 
-        window.location.href =
-          "dashboard.html";
+        members: arrayUnion({
 
-      };
+          id: memberId,
+
+          name: memberData.name || "ไม่มีชื่อ",
+
+          bus: busNumber
+
+        })
+
+      });
+
+      alert("เพิ่มสมาชิกเข้ากลุ่มแล้ว");
+
+    };
 
   </script>
 
