@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Tour Bus Check</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+
+            background: linear-gradient(
+                135deg,
+                #dbeafe,
+                #eff6ff
+            );
+
+            min-height: 100vh;
+
+            padding: 25px 15px;
+        }
+
+        .dashboard-container {
+            width: 100%;
+            max-width: 900px;
+
+            margin: auto;
+        }
+
+        /* ส่วนหัว */
+
+        .header {
+            background: white;
+
+            padding: 30px 20px;
+
+            border-radius: 25px;
+
+            text-align: center;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0, 0, 0, 0.10);
+
+            margin-bottom: 25px;
+        }
+
+        .bus-logo {
+            font-size: 65px;
+
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            font-size: 30px;
+
+            color: #1e3a8a;
+
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #64748b;
+
+            font-size: 16px;
+        }
+
+        /* หัวข้อ */
+
+        .section-title {
+            font-size: 23px;
+
+            color: #1e293b;
+
+            margin: 20px 5px 15px;
+        }
+
+        /* รายการรถ */
+
+        .bus-list {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 18px;
+        }
+
+        /* การ์ดรถ */
+
+        .bus-card {
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 22px;
+
+            text-decoration: none;
+
+            color: #1e293b;
+
+            box-shadow:
+                0 6px 20px
+                rgba(0, 0, 0, 0.08);
+
+            transition: 0.2s;
+        }
+
+        .bus-card:hover {
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 12px 25px
+                rgba(0, 0, 0, 0.13);
+        }
+
+        /* ไอคอนรถ */
+
+        .bus-icon {
+            width: 70px;
+            height: 70px;
+
+            background: #dbeafe;
+
+            border-radius: 20px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-size: 38px;
+
+            flex-shrink: 0;
+        }
+
+        /* ข้อมูลรถ */
+
+        .bus-info {
+            text-align: left;
+        }
+
+        .bus-info h3 {
+            font-size: 19px;
+
+            margin-bottom: 6px;
+
+            color: #1e293b;
+        }
+
+        .bus-info p {
+            font-size: 14px;
+
+            color: #64748b;
+        }
+
+        /* ส่วนท้าย */
+
+        .footer {
+            text-align: center;
+
+            margin-top: 30px;
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+        /* หน้าจอมือถือ */
+
+        @media (max-width: 600px) {
+
+            .bus-list {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+
+            .bus-logo {
+                font-size: 55px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="dashboard-container">
+
+
+        <!-- ส่วนหัว -->
+
+        <div class="header">
+
+            <div class="bus-logo">
+                🚌
+            </div>
+
+            <h1>
+                Tour Bus Check
+            </h1>
+
+            <p>
+                ระบบจัดการและเช็กชื่อสมาชิกในรถทัวร์
+            </p>
+
+        </div>
+
+
+        <!-- เลือกรถ -->
+
+        <h2 class="section-title">
+            🚌 เลือกรถทัวร์
+        </h2>
+
+
+        <div class="bus-list">
+
+
+            <!-- รถคันที่ 1 -->
+
+            <a
+                href="bus.html?bus=1"
+                class="bus-card"
+            >
+
+                <div class="bus-icon">
+                    🚌
+                </div>
+
+                <div class="bus-info">
+
+                    <h3>
+                        รถทัวร์คันที่ 1
+                    </h3>
+
+                    <p>
+                        จัดการรายชื่อสมาชิก
+                    </p>
+
+                </div>
+
+            </a>
+
+
+            <!-- รถคันที่ 2 -->
+
+            <a
+                href="bus.html?bus=2"
+                class="bus-card"
+            >
+
+                <div class="bus-icon">
+                    🚌
+                </div>
+
+                <div class="bus-info">
+
+                    <h3>
+                        รถทัวร์คันที่ 2
+                    </h3>
+
+                    <p>
+                        จัดการรายชื่อสมาชิก
+                    </p>
+
+                </div>
+
+            </a>
+
+
+            <!-- รถคันที่ 3 -->
+
+            <a
+                href="bus.html?bus=3"
+                class="bus-card"
+            >
+
+                <div class="bus-icon">
+                    🚌
+                </div>
+
+                <div class="bus-info">
+
+                    <h3>
+                        รถทัวร์คันที่ 3
+                    </h3>
+
+                    <p>
+                        จัดการรายชื่อสมาชิก
+                    </p>
+
+                </div>
+
+            </a>
+
+
+            <!-- รถคันที่ 4 -->
+
+            <a
+                href="bus.html?bus=4"
+                class="bus-card"
+            >
+
+                <div class="bus-icon">
+                    🚌
+                </div>
+
+                <div class="bus-info">
+
+                    <h3>
+                        รถทัวร์คันที่ 4
+                    </h3>
+
+                    <p>
+                        จัดการรายชื่อสมาชิก
+                    </p>
+
+                </div>
+
+            </a>
+
+
+            <!-- รถคันที่ 5 -->
+
+            <a
+                href="bus.html?bus=5"
+                class="bus-card"
+            >
+
+                <div class="bus-icon">
+                    🚌
+                </div>
+
+                <div class="bus-info">
+
+                    <h3>
+                        รถทัวร์คันที่ 5
+                    </h3>
+
+                    <p>
+                        จัดการรายชื่อสมาชิก
+                    </p>
+
+                </div>
+
+            </a>
+
+
+        </div>
+
+
+        <!-- ส่วนท้าย -->
+
+        <div class="footer">
+
+            Tour Bus Check
+            <br>
+
+            ระบบเช็กชื่อสมาชิกในรถทัวร์
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>
