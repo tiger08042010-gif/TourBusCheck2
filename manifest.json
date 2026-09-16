@@ -1,0 +1,10 @@
+{
+  "name": "Tour Bus Check",
+  "short_name": "Tour Bus",
+  "description": "ระบบเช็กชื่อสมาชิกในรถทัวร์",
+  "start_url": "./login.html",
+  "display": "standalone",
+  "background_color": "#e3f2fd",
+  "theme_color": "#1976d2",
+  "orientation": "portrait"
+}
