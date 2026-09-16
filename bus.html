@@ -420,13 +420,17 @@
 
       } catch (error) {
 
-        console.error(error);
+  console.error("เพิ่มสมาชิกไม่สำเร็จ:", error);
 
-        alert(
-          "ไม่สามารถเพิ่มสมาชิกได้"
-        );
+  alert(
+    "ไม่สามารถเพิ่มสมาชิกได้\n\n" +
+    "รหัสข้อผิดพลาด: " +
+    error.code +
+    "\n" +
+    error.message
+  );
 
-      }
+}
 
     };
 
