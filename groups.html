@@ -472,7 +472,75 @@ window.sendAnnouncement = async function() {
 
   alert("ส่งประกาศเรียบร้อยแล้ว");
 
-};</script>
+};// =========================
+// แสดงประวัติประกาศ
+// =========================
+
+let stopAnnouncementListener = null;
+
+announcementGroup.addEventListener("change", function () {
+
+  const groupId = this.value;
+
+  announcementList.innerHTML = "";
+
+  // ยกเลิกการฟังข้อมูลกลุ่มเดิม
+  if (stopAnnouncementListener) {
+    stopAnnouncementListener();
+    stopAnnouncementListener = null;
+  }
+
+  if (!groupId) {
+    announcementList.innerHTML = "กรุณาเลือกกลุ่มเพื่อดูประกาศ";
+    return;
+  }
+
+  const announcementsRef = collection(
+    db,
+    "groups",
+    groupId,
+    "announcements"
+  );
+
+  stopAnnouncementListener = onSnapshot(
+    announcementsRef,
+    (snapshot) => {
+
+      announcementList.innerHTML = "";
+
+      if (snapshot.empty) {
+        announcementList.innerHTML =
+          "<p>ยังไม่มีประกาศในกลุ่มนี้</p>";
+        return;
+      }
+
+      snapshot.forEach((item) => {
+
+        const data = item.data();
+
+        const div = document.createElement("div");
+
+        div.style.background = "#f3f8ff";
+        div.style.padding = "15px";
+        div.style.marginTop = "10px";
+        div.style.borderRadius = "12px";
+        div.style.border = "1px solid #d5e7ff";
+
+        div.innerHTML = `
+          <strong>📢 ประกาศ</strong>
+          <p style="margin:8px 0;">
+            ${data.message}
+          </p>
+        `;
+
+        announcementList.appendChild(div);
+
+      });
+
+    }
+  );
+
+});</script>
 <div class="box">
   <h2>📢 ส่งข้อความแจ้งข่าวสาร</h2>
 
