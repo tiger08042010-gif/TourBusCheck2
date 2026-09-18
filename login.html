@@ -116,6 +116,16 @@ required
 </form>
 
 <div id="message"></div>
+  <button
+  type="button"
+  id="notificationButton"
+  style="
+    margin-top:15px;
+    background:#43a047;
+  "
+>
+  🔔 เปิดการแจ้งเตือน
+</button>
 
 </div>
 
@@ -130,6 +140,10 @@ import {
  signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
+import {
+  getMessaging,
+  getToken
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-messaging.js";
 const firebaseConfig = {
 
 apiKey:"AIzaSyCyc7rXZ254ZPiLR6j-yKbsJSq3o9VahDw",
@@ -151,6 +165,63 @@ measurementId:"G-LBW7P3XDH1"
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
+const messaging = getMessaging(app);
+
+const VAPID_KEY =
+"BGyqN6cOpllsJ68WORoH85YoK-PgjBK3IoWm5fkHlPhouJuMyVQZnI8njTgFexONWf8Bp7aOyao_aQF2Dczwp_s";
+
+const notificationButton =
+document.getElementById("notificationButton");
+
+notificationButton.addEventListener("click", async () => {
+
+  try {
+
+    if (!("Notification" in window)) {
+      alert("อุปกรณ์นี้ไม่รองรับการแจ้งเตือน");
+      return;
+    }
+
+    const permission =
+      await Notification.requestPermission();
+
+    if (permission !== "granted") {
+      alert("ยังไม่ได้อนุญาตการแจ้งเตือน");
+      return;
+    }
+
+    const registration =
+      await navigator.serviceWorker.ready;
+
+    const token = await getToken(
+      messaging,
+      {
+        vapidKey: VAPID_KEY,
+        serviceWorkerRegistration: registration
+      }
+    );
+
+    if (token) {
+
+      console.log("FCM Token:", token);
+
+      alert("เปิดการแจ้งเตือนสำเร็จแล้ว 🔔");
+
+    } else {
+
+      alert("ยังไม่สามารถสร้าง Token ได้");
+
+    }
+
+  } catch (error) {
+
+    console.error("Notification error:", error);
+
+    alert("เกิดข้อผิดพลาดในการเปิดการแจ้งเตือน");
+
+  }
+
+});
 
 const loginForm =
 document.getElementById("loginForm");
